@@ -1,0 +1,5 @@
+*.lnk
+*.bat
+*.exe
+/scripting/include/
+/scripting/ACS/include/
