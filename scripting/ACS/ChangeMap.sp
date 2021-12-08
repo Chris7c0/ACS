@@ -15,22 +15,40 @@ void ChangeMapIfNeeded()
 	CreateTimer(REALLOW_ACS_MAP_CHANGE_DELAY, TimerResetCanACSChangeMap);
 
 	// Check to see if someone voted for a map, if so, then change to the winning map
-	if(g_bVotingEnabled == true && g_iWinningMapVotes > 0 && g_iWinningMapIndex >= 0)
+	if (g_bVotingEnabled == true && g_iWinningMapVotes > 0 && g_iWinningMapIndex >= 0)
 	{
-		if (IsMapIndexValid(g_iWinningMapIndex) == false)
-			return;
-		
-		CreateTimer(g_fWaitTimeBeforeSwitch[g_iGameMode], Timer_ChangeMap, g_iWinningMapIndex);
+		SetUpMapChange(g_iWinningMapIndex);
 		return;
 	}
 	
-	// If no player has chosen a map by voting, then go with the automatic map rotation cycle
-	int iNextMapIndex = FindNextMapIndex();
-	if (IsMapIndexValid(iNextMapIndex) == false)
+	// If no player has chosen a map by voting, then set up the automatic map rotation cycle map
+	SetUpMapChange(FindNextMapIndex());
+}
+
+// Set everything up for a delayed campaign/map change
+void SetUpMapChange(int iMapIndex)
+{
+	// Ensure its a valid map
+	if (IsMapIndexValid(iMapIndex) == false)
+	{
+		LogError("ACS Error: SetUpMapChange -> Invalid Map Index! %i", iMapIndex);
 		return;
+	}
+
+	// Print Loading Message, must delay or it wont work with OnPZEndGamePanelMsg
+	CreateTimer(0.1, Timer_PrintChangeMapMessages, iMapIndex);
 	
 	// Delayed call to change the map
-	CreateTimer(g_fWaitTimeBeforeSwitch[g_iGameMode], Timer_ChangeMap, iNextMapIndex);
+	CreateTimer(g_fWaitTimeBeforeSwitch[g_iGameMode], Timer_ChangeMap, iMapIndex);
+}
+
+// Inform Server and Players that ACS is changing the Map
+Action Timer_PrintChangeMapMessages(Handle timer, int iMapIndex)
+{
+	PrintToServer("\n\n[ACS] Loading %s\n\n", g_strMapListArray[iMapIndex][MAP_LIST_COLUMN_MAP_DESCRIPTION]);
+	PrintToChatAll("\x03[ACS] \x05Loading \x04%s", g_strMapListArray[iMapIndex][MAP_LIST_COLUMN_MAP_DESCRIPTION]);
+
+	return Plugin_Stop;
 }
 
 // Change campaign using its index

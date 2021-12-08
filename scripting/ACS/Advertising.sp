@@ -19,7 +19,10 @@ void DisplayNextMapToAll()
 
 	// Ensure its a valid map first
 	if (IsMapIndexValid(iMapIndex) == false)
+	{
+		LogError("ACS Error: DisplayNextMapToAll -> Invalid Map Index! %i", iMapIndex);
 		return;
+	}
 
 	// Display the message
 	DisplayNextMapMessage(

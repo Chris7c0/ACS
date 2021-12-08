@@ -25,7 +25,7 @@ char g_strGameModeString[][] = {
 // These must line up the game modes array
 float g_fWaitTimeBeforeSwitch[] = {
     5.0,    // GAMEMODE_COOP
-    2.0,    // GAMEMODE_VERSUS
+    3.0,    // GAMEMODE_VERSUS
     8.0,    // GAMEMODE_SCAVENGE
     5.0,    // GAMEMODE_SURVIVAL
     5.0     // GAMEMODE_VERSUS_SURVIVAL
