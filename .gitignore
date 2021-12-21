@@ -2,4 +2,6 @@
 *.bat
 *.exe
 /scripting/include/
-/scripting/ACS/include/
+spcomp
+spcomp64
+compile.sh
