@@ -18,11 +18,9 @@ void DisplayNextMapToAll()
 	int iMapIndex = g_iWinningMapIndex >= 0 ? g_iWinningMapIndex : FindNextMapIndex();
 
 	// Ensure its a valid map first
+	// Note: Do not log an error because expected to fail on non-specified maps, like mid campaign maps
 	if (IsMapIndexValid(iMapIndex) == false)
-	{
-		LogError("ACS Error: DisplayNextMapToAll -> Invalid Map Index! %i", iMapIndex);
 		return;
-	}
 
 	// Display the message
 	DisplayNextMapMessage(
